@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
+
 const { ApolloServer } = require('@apollo/server');
 const { startStandaloneServer } = require('@apollo/server/standalone');
 
@@ -8,7 +12,7 @@ const server = new ApolloServer({
 
 startStandaloneServer(server, {
   listen: {
-    port: 4000
+    port: process.env.PORT
   }
 })
   .then(({ url }) => {
