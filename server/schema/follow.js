@@ -9,16 +9,13 @@ const typeDefs = `#graphql
   }
 
   type Query {
-    Follow: Follow
+    follow: Follow
     followers(id: ID): [Follow] 
     followings(id: ID): [Follow] 
   }
 
   input NewFollow {
     followingId: ID
-    followerId: ID
-    createdAt: String
-    updatedAt: String
   }
 
   type Mutation {
