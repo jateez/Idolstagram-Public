@@ -5,10 +5,34 @@ const { signToken } = require("../helpers/jwt")
 const resolvers = {
   Query: {
     users: async (_, args, contextValue) => {
+    },
+    searchUsers: async (_, args, contextValue) => {
       const { instanceDb, authentication } = contextValue
-      console.log(await authentication())
-      console.log("jalan di mutation")
-      // console.log(instanceDb, "<<< instanceDb")
+      const { query } = args
+      await authentication()
+      let results = []
+
+      if (query.name) {
+        let temp = await instanceDb.collection('users').aggregate(
+          [
+            { $match: { name: { $regex: new RegExp(query.name, "i") } } },
+            { $project: { password: 0 } }
+          ],
+          { maxTimeMS: 60000, allowDiskUse: true }
+        ).toArray()
+        results = temp
+      }
+      if (query.username) {
+        let temp = await instanceDb.collection('users').aggregate(
+          [
+            { $match: { username: { $regex: new RegExp(query.username, "i") } } },
+            { $project: { password: 0 } }
+          ],
+          { maxTimeMS: 60000, allowDiskUse: true }
+        ).toArray()
+        results = temp
+      }
+      return results
     }
   },
   Mutation: {
@@ -58,7 +82,6 @@ const resolvers = {
       }
       let access_token = signToken({ id: foundUser._id })
       return access_token
-
     },
 
   }

@@ -9,8 +9,12 @@ type User {
 type Query {
   users: [User]
   userById(id: ID!): User
-  usersByName(name: String!): [User]
-  usersByUsername(username: String!): [User]
+  searchUsers(query: SearchUser): [User]
+}
+
+input SearchUser {
+  name: String
+  username: String
 }
 
 input NewUser {
