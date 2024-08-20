@@ -29,7 +29,7 @@ connect()
     context: ({ req, res }) => {
       return {
         instanceDb,
-        authentication: () => authentication(req)
+        authentication: async () => await authentication(req)
       }
     }
   }))
@@ -40,18 +40,3 @@ connect()
   .catch((err) => {
     console.log(`${err} <-- Error`)
   })
-
-// startStandaloneServer(server, {
-//   listen: {
-//     port: process.env.PORT
-//   },
-//   context: {
-
-//   }
-// })
-//   .then(({ url }) => {
-//     console.log(`🚀  Server ready at: ${url}`);
-//   })
-//   .catch((err) => {
-//     console.log(`${err} <-- Error`)
-//   })
