@@ -13,7 +13,6 @@ const connect = async () => {
 }
 
 const getDB = async () => {
-  console.log('jalan getDB')
   return client.db("GC01")
 }
 
