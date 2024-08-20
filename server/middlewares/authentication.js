@@ -2,7 +2,6 @@ const { ObjectId } = require("mongodb")
 const { getDB } = require("../config/connection")
 const { verifyToken } = require("../helpers/jwt")
 const authentication = async (req) => {
-  console.log(req)
   if (!req.headers.authorization) {
     throw new Error("Unauthenticated")
   }
@@ -15,13 +14,12 @@ const authentication = async (req) => {
     throw new Error("Unauthenticated")
   }
 
-  const instanceDb = getDB()
-
-  const foundUser = instanceDb.collection.findOne({ id: ObjectId(id) })
+  const instanceDb = await getDB()
+  const foundUser = await instanceDb.collection("users").findOne({ _id: new ObjectId(verifiedToken.id) })
 
   if (!foundUser) {
     throw new Error("Unauthenticated")
   }
-  return foundUser.id
+  return verifiedToken.id
 }
 module.exports = authentication
