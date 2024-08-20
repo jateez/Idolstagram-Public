@@ -35,8 +35,21 @@ input NewPost {
   tags: [String]
   imgUrl: String
   authorId: ID!
-  comments: [Comment]
-  likes: [Like]
+  comments: [newComment]
+  likes: [newLike]
+  createdAt: String
+  updatedAt: String
+}
+
+input newComment {
+  content: String!
+  username: String!
+  createdAt: String
+  updatedAt: String
+}
+
+input newLike {
+  username: String!
   createdAt: String
   updatedAt: String
 }

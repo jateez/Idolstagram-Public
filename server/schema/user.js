@@ -4,10 +4,10 @@ type User {
   name: String
   username: String!
   email: String!
-  password: String!
 }
 
 type Query {
+  users: [User]
   userById(id: ID!): User
   usersByName(name: String!): [User]
   usersByUsername(username: String!): [User]
@@ -27,7 +27,7 @@ input LoggedUser {
 
 type Mutation {
   register(newUser: NewUser): User
-  login(loggedUser: LoggedUser): User
+  login(loggedUser: LoggedUser): String
 }
 `
 
