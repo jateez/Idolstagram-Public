@@ -27,7 +27,7 @@ type Post {
 
 type Query {
   posts: [Post]
-  post(id: ID): Post
+  getPost(id: ID): Post
 }
 
 input NewPost {
@@ -42,19 +42,17 @@ input NewPost {
 
 input NewComment {
   content: String!
-  username: String!
-  createdAt: String
-  updatedAt: String
+  postId: String!
 }
 
 input NewLike {
-  username: String!
-  createdAt: String
-  updatedAt: String
+  postId: String!
 }
 
 type Mutation {
-  addPost(newPost: NewPost): Post 
+  addPost(newPost: NewPost): Post
+  addComment(newComment: NewComment): Comment
+  addLike(newLike: NewLike): Like
 }
 
 `

@@ -8,7 +8,7 @@ type User {
 
 type Query {
   users: [User]
-  userById(id: ID!): User
+  getUserById(id: ID!): User
   searchUsers(query: SearchUser): [User]
 }
 
