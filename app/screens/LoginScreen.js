@@ -1,23 +1,36 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { Button, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useState, useEffect } from "react"
 export default function LoginScreen(props) {
-  const [email, setEmail] = useState("email")
-  const [password, setPassword] = useState("password")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   return (
+    <LinearGradient colors={["#fef8f3", "#f0f4fe", "#eef8ff"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.container} >
+      <View style={{ width: 300, height: 300, flex: 2, alignItems: "center", justifyContent: "center" }}>
+        <Image source={require("../assets/instagram.1024x1024.png")} style={styles.image} />
+      </View>
+      <View style={{ flex: 2 }} >
+        <TextInput style={styles.input} onChangeText={setEmail} value={email} placeholder={"Email"} />
+        <TextInput style={styles.input} onChangeText={setPassword} value={password} placeholder={"Password"} secureTextEntry={true} />
 
-    <View style={styles.container}>
-      <TextInput style={styles.input} onChangeText={setEmail} value={email} />
-      <TextInput style={styles.input} onChangeText={setPassword} value={password} />
+        {/* <LinearGradient colors={["#f9ce34", "#ee2a7b", "#6228d7"]} style={styles.login} start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}> */}
 
-      <LinearGradient colors={["#f9ce34", "#ee2a7b", "#6228d7"]} style={styles.button} start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}>
-        <Pressable>
-          <Text style={{ color: "white" }} onPress={() => props.navigation.navigate("TabScreen")} >
-            Login
+        <Pressable style={styles.login} onPress={() => props.navigation.navigate("TabScreen")}>
+          <Text style={{ color: "white" }}  >
+            Log in
           </Text>
         </Pressable>
-      </LinearGradient>
-    </View >
+        {/* </LinearGradient> */}
+      </View >
+      <View style={{ flex: 1, alignItems: "flex-end", justifyContent: "flex-end" }}>
+        <Pressable style={styles.register} onPress={() => props.navigation.navigate("Register")}>
+          <Text style={{ color: "#5083b1", textAlign: "center" }} >
+            Create new account
+          </Text>
+        </Pressable>
+      </View>
+
+    </LinearGradient >
   )
 
 };
@@ -28,13 +41,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffffff",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    marginVertical: 20
   },
-  button: {
-    width: 300,
+  image: {
+    width: 102.4,
+    height: 102.4,
+  },
+  login: {
+    width: 350,
     height: 50,
     borderRadius: 20,
-    backgroundColor: "red",
+    backgroundColor: "#0063e1",
     padding: 15,
     alignItems: "center",
   },
@@ -42,12 +60,21 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(52, 52, 52, 0.8)"
   },
   input: {
-    width: 300,
-    height: 50,
-    margin: 12,
+    width: 350,
+    height: 60,
+    marginBottom: 15,
     borderWidth: 1,
-    padding: 10,
+    padding: 15,
     borderRadius: 10,
     borderColor: "#a5adb1"
+  },
+  register: {
+    width: 350,
+    height: 50,
+    borderRadius: 20,
+    backgroundColor: 'transparent',
+    borderColor: "#5083b1",
+    borderWidth: 2,
+    paddingVertical: 15,
   }
 })
