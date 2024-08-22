@@ -25,8 +25,8 @@ export default function Post(props) {
         <View style={{ flex: 1, }}>
           <View style={{ flex: 1, flexDirection: "row", gap: 20, alignItems: "center", marginHorizontal: 10 }}>
 
-            <FontAwesome name="heart-o" size={24} color="black" />
-            {/* <FontAwesome name="heart" size={24} color="black" /> */}
+            {/* <FontAwesome name="heart-o" size={24} color="black" /> */}
+            <FontAwesome name="heart" size={24} color="red" />
             <FontAwesome name="comment-o" size={24} style={{ paddingBottom: 4 }} color="black" />
           </View>
           <View style={{ flex: 0.5 }}>
@@ -35,8 +35,15 @@ export default function Post(props) {
             </Text>
           </View>
         </View>
-        <View style={{ flex: 2, marginHorizontal: 10, paddingTop: 7.5 }}>
-          <Text> <Text>Username</Text> Captions</Text>
+        <View style={{ flex: 2, marginHorizontal: 10, paddingTop: 7.5, gap: 7.5 }}>
+          <View>
+            <Text><Text>Username</Text> Captions</Text>
+
+          </View>
+          <View style={{ gap: 7.5 }}>
+            <Text>View all comments</Text>
+            <Text>9 hours agos</Text>
+          </View>
         </View>
       </View>
     </View>
