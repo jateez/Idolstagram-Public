@@ -1,5 +1,5 @@
 import { View, Text, Pressable, Button } from "react-native";
-
+import Post from "../components/Post";
 export default function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1, }}>
@@ -15,6 +15,8 @@ export default function HomeScreen({ navigation }) {
         <Button
           title="Login" onPress={() => navigation.navigate("Login")} />
       </Pressable>
+
+      <Post />
     </View>
   );
 }

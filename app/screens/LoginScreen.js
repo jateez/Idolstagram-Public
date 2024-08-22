@@ -13,14 +13,12 @@ export default function LoginScreen(props) {
         <TextInput style={styles.input} onChangeText={setEmail} value={email} placeholder={"Email"} />
         <TextInput style={styles.input} onChangeText={setPassword} value={password} placeholder={"Password"} secureTextEntry={true} />
 
-        {/* <LinearGradient colors={["#f9ce34", "#ee2a7b", "#6228d7"]} style={styles.login} start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}> */}
 
         <Pressable style={styles.login} onPress={() => props.navigation.navigate("TabScreen")}>
           <Text style={{ color: "white" }}  >
             Log in
           </Text>
         </Pressable>
-        {/* </LinearGradient> */}
       </View >
       <View style={{ flex: 1, alignItems: "flex-end", justifyContent: "flex-end" }}>
         <Pressable style={styles.register} onPress={() => props.navigation.navigate("Register")}>
@@ -39,7 +37,6 @@ export default function LoginScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 20
@@ -55,9 +52,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#0063e1",
     padding: 15,
     alignItems: "center",
-  },
-  inside: {
-    backgroundColor: "rgba(52, 52, 52, 0.8)"
   },
   input: {
     width: 350,
