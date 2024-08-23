@@ -1,11 +1,17 @@
 const { GraphQLError, isConstValueNode } = require("graphql")
-const { ObjectId } = require("mongodb")
+const { ObjectId } = require("mongodb");
+const redis = require("../config/redis");
 
 const resolvers = {
   Query: {
     posts: async (_, args, contextValue) => {
       const { authentication, instanceDb } = contextValue;
       await authentication()
+      const postsCache = await redis.get("posts:all");
+
+      if (postsCache) {
+        return JSON.parse(postsCache)
+      }
 
       const result = await instanceDb.collection('posts').aggregate(
         [
@@ -15,21 +21,19 @@ const resolvers = {
               from: 'users',
               localField: 'authorId',
               foreignField: '_id',
-              as: 'author',
-              pipeline: [
-                { $unset: { name, email, password } }
-              ]
+              as: 'author'
             }
           },
+          { $unwind: { path: '$author' } },
           {
-            $unwind: {
-              path: '$author',
-              preserveNullAndEmptyArrays: true
-            }
+            $addFields: { authorName: '$author.name' }
           },
+          { $unset: 'author' }
         ],
         { maxTimeMS: 60000, allowDiskUse: true }
       ).toArray();
+
+      await redis.set("posts:all", JSON.stringify(result))
 
       return result;
     },
@@ -80,6 +84,7 @@ const resolvers = {
       newPost.likes = []
       newPost.tags = []
       await instanceDb.collection("posts").insertOne(newPost)
+      await redis.del("posts:all")
       return newPost
     },
     addComment: async (_, args, contextValue) => {
@@ -102,9 +107,13 @@ const resolvers = {
       newComment.username = foundUser.username
       delete newComment.postId
 
+
       await instanceDb.collection("posts").updateOne({ _id: foundPost._id }, {
         $push: { comments: newComment },
       })
+
+      await redis.del("posts:all")
+
       return newComment;
     },
     addLike: async (_, args, contextValue) => {
@@ -128,6 +137,8 @@ const resolvers = {
       newLike.createdAt = new Date();
       newLike.updatedAt = new Date();
       delete newLike.postId;
+
+      await redis.del("posts:all")
 
       await instanceDb.collection("posts").updateOne({ _id: foundPost._id },
         {

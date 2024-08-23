@@ -18,6 +18,7 @@ type Post {
   tags: [String]
   imgUrl: String
   authorId: ID!
+  authorName: String!
   comments: [Comment]
   likes: [Like]
   createdAt: String
