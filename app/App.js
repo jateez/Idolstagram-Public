@@ -1,26 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import Home from './screens/HomeScreen';
-import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import StackScreen from './screens/StackScreen';
-import TabScreen from './screens/TabScreen';
+import AuthProvider from "./contexts/authContext"
+import { ApolloProvider } from '@apollo/client';
+import client from './config/apollo';
+import MainStack from './navigators/MainStack';
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <StackScreen />
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <AuthProvider>
+      <ApolloProvider client={client}>
+        <MainStack />
+      </ApolloProvider>
+    </AuthProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-  },
-});
