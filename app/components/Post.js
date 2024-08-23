@@ -11,17 +11,17 @@ export default function Post(props) {
         </View>
         <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", paddingRight: 15, paddingLeft: 5 }}>
           <View>
-            <Text>Username</Text>
+            <Text>{props.post?.authorName}</Text>
           </View>
           <View>
             <SimpleLineIcons name="options" size={16} color="black" />
           </View>
         </View>
       </View>
-      <View style={{ flex: 6, alignItems: "center", justifyContent: "center" }}>
-        <Image source={{ uri: "https://picsum.photos/200" }} style={{ width: "100%", height: "100%" }} />
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", width: 300, height: 300 }}>
+        <Image source={{ uri: props.post?.imgUrl }} style={{ width: "100%", height: "100%" }} />
       </View>
-      <View style={{ flex: 2.5, paddingTop: 4 }}>
+      <View style={{ flex: 1, paddingTop: 4 }}>
         <View style={{ flex: 1, }}>
           <View style={{ flex: 1, flexDirection: "row", gap: 20, alignItems: "center", marginHorizontal: 10 }}>
 
@@ -29,15 +29,15 @@ export default function Post(props) {
             <FontAwesome name="heart" size={24} color="red" />
             <FontAwesome name="comment-o" size={24} style={{ paddingBottom: 4 }} color="black" />
           </View>
-          <View style={{ flex: 0.5 }}>
+          <View style={{ flex: 1 }}>
             <Text style={{ marginHorizontal: 10 }}>
-              12121 Likes
+              {props.post?.likes.length} Likes
             </Text>
           </View>
         </View>
-        <View style={{ flex: 2, marginHorizontal: 10, paddingTop: 7.5, gap: 7.5 }}>
+        <View style={{ flex: 1, marginHorizontal: 10, paddingTop: 7.5, gap: 7.5 }}>
           <View>
-            <Text><Text>Username</Text> Captions</Text>
+            <Text><Text>{props.post?.authorName}</Text> {props.post?.content}</Text>
 
           </View>
           <View style={{ gap: 7.5 }}>

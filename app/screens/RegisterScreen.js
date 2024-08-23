@@ -58,7 +58,7 @@ export default function RegisterScreen(props) {
       <KeyboardAvoidingView style={{ flex: 1 }}>
         <LinearGradient colors={["#fef8f3", "#f0f4fe", "#eef8ff"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.container} >
           {errorMessage ? showToast(errorMessage) : ""}
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", width: 250, height: 250 }}>
             <Image source={require("../assets/instagram.1024x1024.png")} style={styles.image} />
             <GradientText style={styles.instagramText}> Instagram</GradientText>
           </View>
