@@ -73,7 +73,7 @@ export default function StackScreen(props) {
           }
         }} />
         <Stack.Screen name="AddPost" component={AddPostScreen} options={{ title: "New Post" }} />
-        {/* <Stack.Screen name="ProfileDetail" component={ProfileDetailScreen} options={({ route }) => ({ title: route.params.userName })} /> */}
+        <Stack.Screen name="ProfileDetail" component={ProfileDetailScreen} options={({ route }) => ({ title: route.params.userName })} />
       </> : <>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />

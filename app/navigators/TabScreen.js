@@ -60,11 +60,11 @@ export default function TabScreen(props) {
           return focused ? <Ionicons name="add-circle" size={24} color="black" /> : <Ionicons name="add-circle-outline" size={24} color="black" />
         }
       }} />
-      <Tab.Screen name="Profile" component={ProfileScreen} options={{
+      {/* <Tab.Screen name="Profile" component={ProfileScreen} options={{
         tabBarShowLabel: false, title: props.username ? props.username : "", tabBarIcon: ({ focused }) => {
           return focused ? <FontAwesome name="user-circle" size={24} color="black" /> : <FontAwesome name="user-circle-o" size={24} color="black" />
         }
-      }} />
+      }} /> */}
     </Tab.Navigator>
   );
 }

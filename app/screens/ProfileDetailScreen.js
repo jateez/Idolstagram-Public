@@ -42,37 +42,38 @@ export default function ProfileDetailScreen(props) {
       .catch((err) => showToast(err.message))
   }
 
-  const renderUserItem = ({ item }) => (
-    <View style={styles.userItem}>
-      <Image style={styles.userAvatar} source={{ uri: `https://picsum.photos/20${Math.floor(Math.random() * (10 + 1))}` }} />
-      <Text style={styles.userName}>{item.username}</Text>
-    </View>
-
-  )
+  const renderUserItem = ({ item }) => {
+    return (
+      <View style={styles.userItem}>
+        <Image style={styles.userAvatar} source={{ uri: `https://picsum.photos/20${Math.floor(Math.random() * (10 + 1))}` }} />
+        <Text style={styles.userName}>{item.username}</Text>
+      </View>
+    )
+  }
 
   const renderContent = () => {
-    let data = [];
+    let temp = [];
     let emptyText = "";
 
     switch (activeTab) {
       case "posts":
-        data = [];
+        temp = [];
         emptyText = "Coming soon";
         break;
       case "followers":
-        data = data?.getUserById?.followers || [];
+        temp = data?.getUserById?.followers;
         emptyText = "No followers yet";
         break;
       case "followings":
-        data = data?.getUserById?.followings || [];
+        temp = data?.getUserById?.followings;
         emptyText = "No followings yet";
         break;
     }
 
     return (
       <FlatList
-        data={data}
-        renderItem={renderUserItem}
+        data={temp}
+        renderItem={(temp) => renderUserItem(temp)}
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={<Text style={styles.emptyStateText}>{emptyText}</Text>}
       />
@@ -109,10 +110,10 @@ export default function ProfileDetailScreen(props) {
           <Text style={[styles.tabText, activeTab === "posts" && styles.activeTabText]}>Posts</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.tab, activeTab === "followers" && styles.activeTab]} onPress={() => setActiveTab("followers")}>
-          <Text style={[styles.tabText, activeTab === "followers" && styles.activeTabText]}>Followings</Text>
+          <Text style={[styles.tabText, activeTab === "followers" && styles.activeTabText]}>Followers</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.tab, activeTab === "followings" && styles.activeTab]} onPress={() => setActiveTab("followings")}>
-          <Text style={[styles.tabText, activeTab === "followings" && styles.activeTabText]}>Followers</Text>
+          <Text style={[styles.tabText, activeTab === "followings" && styles.activeTabText]}>Followings</Text>
         </TouchableOpacity>
       </View>
       {renderContent()}
@@ -196,11 +197,15 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     alignItems: "center"
   },
+  tabText: {
+    fontSize: 14,
+    color: '#666',
+  },
   activeTab: {
     borderBottomWidth: 2,
     borderBottomColor: "#0095f6"
   },
-  tabText: {
+  activeTabText: {
     color: "#0095f6",
     fontWeight: "bold"
   },

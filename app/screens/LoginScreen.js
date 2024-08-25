@@ -9,8 +9,8 @@ import GradientText from "../components/GradientText"
 import LoadingScreen from "../components/LoadingScreen";
 
 export default function LoginScreen(props) {
-  const [email, setEmail] = useState("jateez@mail.com")
-  const [password, setPassword] = useState("jateez")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const { setIsSignedIn } = useContext(AuthContext)
   const [Login, { data, loading, error }] = useMutation(LOGIN)
   const [isLoading, setIsLoading] = useState(false)

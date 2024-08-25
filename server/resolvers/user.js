@@ -61,7 +61,7 @@ const resolvers = {
                 {
                   $lookup: {
                     from: "users",
-                    localField: "followingId",
+                    localField: "followerId",
                     foreignField: "_id",
                     as: "data",
                   },
@@ -94,7 +94,7 @@ const resolvers = {
                 {
                   $lookup: {
                     from: "users",
-                    localField: "followerId",
+                    localField: "followingId",
                     foreignField: "_id",
                     as: "data",
                   },
