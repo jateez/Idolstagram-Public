@@ -5,7 +5,6 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useNavigation } from "@react-navigation/native";
 export default function Post(props) {
   const navigation = useNavigation()
-  console.log(props.post.likes)
   return (
     <View style={styles.container}>
       <View style={styles.header}>

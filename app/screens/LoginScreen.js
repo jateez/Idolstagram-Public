@@ -27,7 +27,6 @@ export default function LoginScreen(props) {
       const loggedUser = { email, password }
       const res = await Login({ variables: { loggedUser } })
       await SecureStore.setItemAsync("access_token", res.data.login)
-      console.log(res.data.login)
       setIsSignedIn(true)
     } catch (error) {
       setErrorMessage(error.message)
