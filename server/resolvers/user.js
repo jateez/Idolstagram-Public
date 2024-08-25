@@ -41,144 +41,90 @@ const resolvers = {
       await authentication()
 
       const foundUser = await instanceDb.collection("users").findOne({ _id: new ObjectId(id) })
-
       if (!foundUser) {
         throw new Error("User not found")
       }
-
-
-      const result = await instanceDb.collection("users").aggregate([
-        { $match: { _id: new ObjectId(id) } },
-        {
-          $lookup: {
-            from: "follows",
-            localField: "_id",
-            foreignField: "followingId",
-            as: "followers",
-            pipeline: [
-              {
-                $lookup: {
-                  from: "users",
-                  localField: "followingId",
-                  foreignField: "_id",
-                  as: "data",
-                  pipeline: [
-                    { $unset: { name, email, password } }
-                  ]
+      const result = await instanceDb.collection("users").aggregate(
+        [
+          {
+            $match: {
+              _id: new ObjectId(id)
+            }
+          },
+          {
+            $lookup: {
+              from: 'follows',
+              localField: '_id',
+              foreignField: 'followingId',
+              as: 'followers',
+              pipeline: [
+                {
+                  $lookup: {
+                    from: "users",
+                    localField: "followingId",
+                    foreignField: "_id",
+                    as: "data",
+                  },
+                },
+                {
+                  $unwind: {
+                    path: "$data"
+                  }
+                },
+                {
+                  $addFields: {
+                    name: "$data.name",
+                    username: "$data.username",
+                    email: "$data.email",
+                  }
+                },
+                {
+                  $unset: "data"
                 }
-              },
-              {
-                $unwind: {
-                  path: "$followers"
+              ]
+            }
+          },
+          {
+            $lookup: {
+              from: 'follows',
+              localField: '_id',
+              foreignField: 'followerId',
+              as: 'followings',
+              pipeline: [
+                {
+                  $lookup: {
+                    from: "users",
+                    localField: "followerId",
+                    foreignField: "_id",
+                    as: "data",
+                  },
+                },
+                {
+                  $unwind: {
+                    path: "$data"
+                  }
+                },
+                {
+                  $addFields: {
+                    name: "$data.name",
+                    username: "$data.username",
+                    email: "$data.email",
+                  }
+                },
+                {
+                  $unset: "data"
                 }
-              }
-            ]
+              ]
+            }
+          },
+          {
+            $unset: ["password"]
           }
-        },
-        {
-          $lookup: {
-            from: "follows",
-            localField: "_id",
-            foreignField: "followerId",
-            as: "followings",
-            pipeline: [
-              {
-                $lookup: {
-                  from: "users",
-                  localField: "followerId",
-                  foreignField: "_id",
-                  as: "data",
-                  pipeline: [
-                    { $unset: { name, email, password } }
-                  ]
-                }
-              },
-              {
-                $unwind: {
-                  path: "$following"
-                }
-              }
-            ]
-          }
-        }
-      ]).toArray()
+        ],
+        { maxTimeMS: 60000, allowDiskUse: true }
+      ).toArray();
 
-      return result
-
-      // // let result = await instanceDb.collection("users").aggregate(
-      // //   [
-      // //     {
-      // //       $match: {
-      // //         _id: new ObjectId(id)
-      // //       }
-      // //     },
-      // //     {
-      // //       $lookup: {
-      // //         from: 'follows',
-      // //         localField: '_id',
-      // //         foreignField: 'followingId',
-      // //         as: 'followers'
-      // //       }
-      // //     },
-      // //     { $unwind: '$followers' },
-      // //     {
-      // //       $lookup: {
-      // //         from: 'users',
-      // //         localField: 'followers.followerId',
-      // //         foreignField: '_id',
-      // //         as: 'followersData'
-      // //       }
-      // //     },
-      // //     { $unwind: { path: '$followersData' } },
-      // //     {
-      // //       $addFields: {
-      // //         'followers.data': '$followersData'
-      // //       }
-      // //     },
-      // //     {
-      // //       $group: {
-      // //         _id: '_id',
-      // //         followers: { $push: '$followers' }
-      // //       }
-      // //     }
-      // //   ],
-      // //   { maxTimeMS: 60000, allowDiskUse: true }
-      // // );
-
-      // const followers = await instanceDb.collection("follows").aggregate([
-      //   {
-      //     $match: { followingId: new ObjectId(id) }
-      //   },
-      //   {
-      //     $lookup: {
-      //       from: "users",
-      //       localField: "followerId",
-      //       foreignField: "_id",
-      //       as: "data",
-      //     }
-      //   }
-      // ]).toArray()
-
-      // console.log(followers)
-
-      // const following = await instanceDb.collection("follows").aggregate([
-      //   {
-      //     $match: { followerId: new ObjectId(id) }
-      //   },
-      //   {
-      //     $lookup: {
-      //       from: "users",
-      //       localField: "followingId",
-      //       foreignField: "_id",
-      //       as: "data"
-      //     }
-      //   }
-      // ]).toArray()
-
-      // foundUser.followers = followers;
-      // foundUser.following = following;
-      // let result = foundUser;
-      // return result
+      return result[0]
     }
   },
   Mutation: {

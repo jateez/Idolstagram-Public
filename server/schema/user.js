@@ -2,13 +2,32 @@ const typeDefs = `#graphql
 type User {
   _id: ID
   name: String
-  username: String!
-  email: String!
+  username: String
+  email: String
 }
 
+type UserDetails {
+  _id: ID
+  name: String
+  username: String
+  email: String
+  followers: [UserFollowsDetails]
+  followings: [UserFollowsDetails]
+}
+
+type UserFollowsDetails {
+  _id: ID
+  name: String
+  username: String
+  email: String
+  followingId: ID
+  followerId: ID
+  createdAt: String
+  updatedAt: String
+}
 type Query {
   users: [User]
-  getUserById(id: ID!): User
+  getUserById(id: ID!): UserDetails
   searchUsers(query: SearchUser): [User]
 }
 

@@ -1,4 +1,4 @@
-const { GraphQLError, isConstValueNode } = require("graphql")
+const { GraphQLError } = require("graphql")
 const { ObjectId } = require("mongodb");
 const redis = require("../config/redis");
 
@@ -45,7 +45,7 @@ const resolvers = {
         [
           {
             $match: {
-              _id: ObjectId(id)
+              _id: new ObjectId(id)
             }
           },
           {
@@ -53,22 +53,18 @@ const resolvers = {
               from: 'users',
               localField: 'authorId',
               foreignField: '_id',
-              as: 'author',
-              pipeline: [
-                { $unset: { name, email, password } }
-              ]
+              as: 'author'
             }
           },
+          { $unwind: { path: '$author' } },
           {
-            $unwind: {
-              path: '$author',
-              preserveNullAndEmptyArrays: true
-            }
-          }
+            $addFields: { authorName: '$author.name' }
+          },
+          { $unset: 'author' }
         ],
         { maxTimeMS: 60000, allowDiskUse: true }
-      );
-      return result
+      ).toArray();
+      return result[0]
     }
   },
   Mutation: {
@@ -77,6 +73,10 @@ const resolvers = {
       const { newPost } = args
 
       const userId = await authentication()
+
+      const foundUser = await instanceDb.collection("users").findOne({ _id: new ObjectId(userId) })
+
+      newPost.authorName = foundUser.username
       newPost.createdAt = new Date()
       newPost.updatedAt = new Date()
       newPost.authorId = new ObjectId(userId)
@@ -129,7 +129,7 @@ const resolvers = {
       if (!foundUser) {
         throw new Error("User not found")
       }
-      if (foundPost.likes.filter(like => like.username === foundUser.username)) {
+      if (foundPost.likes.some(like => like.username === foundUser.username)) {
         throw new Error("Post already liked by user")
       }
 
@@ -145,6 +145,7 @@ const resolvers = {
           $addToSet: { likes: newLike }
         }
       )
+      return newLike;
     }
   }
 }

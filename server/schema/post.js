@@ -35,10 +35,6 @@ input NewPost {
   content: String!
   tags: [String]
   imgUrl: String
-  comments: [NewComment]
-  likes: [NewLike]
-  createdAt: String
-  updatedAt: String
 }
 
 input NewComment {

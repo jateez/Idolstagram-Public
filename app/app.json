@@ -23,8 +23,17 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-secure-store"
-    ]
+    "plugins": ["expo-secure-store"],
+    "extra": {
+      "eas": {
+        "projectId": "f71a2927-cbfa-480d-81a3-2a882cc14868"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/f71a2927-cbfa-480d-81a3-2a882cc14868"
+    }
   }
 }

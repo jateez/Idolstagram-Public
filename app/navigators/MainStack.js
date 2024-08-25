@@ -4,6 +4,7 @@ import StackScreen from './StackScreen';
 import { useEffect, useState, useContext } from "react";
 import * as SecureStore from "expo-secure-store"
 import { AuthContext } from '../contexts/authContext';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function MainStack(props) {
   const { isSignedIn, setIsSignedIn } = useContext(AuthContext)
@@ -22,6 +23,14 @@ export default function MainStack(props) {
         setIsLoading(false)
       })
   }, [])
+
+  if (isLoading) {
+    return (
+      <>
+        <LoadingScreen />
+      </>
+    )
+  }
 
   return (
     <>

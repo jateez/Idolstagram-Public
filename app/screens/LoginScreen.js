@@ -6,6 +6,7 @@ import { useMutation } from "@apollo/client";
 import { LOGIN } from "../queries/query";
 import * as SecureStore from "expo-secure-store"
 import GradientText from "../components/GradientText"
+import LoadingScreen from "../components/LoadingScreen";
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState("jateez@mail.com")
@@ -26,9 +27,9 @@ export default function LoginScreen(props) {
       const loggedUser = { email, password }
       const res = await Login({ variables: { loggedUser } })
       await SecureStore.setItemAsync("access_token", res.data.login)
+      console.log(res.data.login)
       setIsSignedIn(true)
     } catch (error) {
-      console.log(error.message)
       setErrorMessage(error.message)
     } finally {
       setIsLoading(false)
@@ -37,9 +38,7 @@ export default function LoginScreen(props) {
 
   if (isLoading) {
     return (
-      <View style={styles.loadingOverlay}>
-        <ActivityIndicator size="large" color="#0063e1" />
-      </View>
+      <LoadingScreen />
     )
   }
 
@@ -76,12 +75,6 @@ export default function LoginScreen(props) {
 };
 
 const styles = StyleSheet.create({
-  loadingOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   container: {
     flex: 1,
     alignItems: "center",

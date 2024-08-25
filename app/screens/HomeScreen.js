@@ -1,51 +1,56 @@
-import { View, Text, Pressable, Button, FlatList, ToastAndroid } from "react-native";
+import { View, FlatList, ToastAndroid, StyleSheet } from "react-native";
 import Post from "../components/Post";
-import { useQuery } from "@apollo/client";
-import { GET_POSTS } from "../queries/query";
-import { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { ADD_LIKE_TO_POST, GET_POSTS } from "../queries/query";
 import LoadingScreen from "../components/LoadingScreen";
+export default function HomeScreen(props) {
+  const { data, loading } = useQuery(GET_POSTS)
+  const [addLike, { loading: likeLoading, error }] = useMutation(ADD_LIKE_TO_POST, {
+    refetchQueries: [GET_POSTS]
+  })
 
-export default function HomeScreen({ navigation }) {
-  const { data, loading, error } = useQuery(GET_POSTS)
+  const showToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.LONG, ToastAndroid.TOP);
+  };
+  const showToastLoading = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+  };
 
-  const showToast = (err) => {
-    ToastAndroid.show(err, ToastAndroid.LONG, ToastAndroid.TOP)
+  const likeHandler = (postId) => {
+    addLike({
+      variables: {
+        newLike: {
+          postId: postId
+        }
+      }
+    }).then(() => showToast("Successfuly liked post"))
+      .catch((err) => {
+        showToast(err.message)
+      })
   }
 
-  if (true) {
-    console.log("jalan loading")
-    return
-    <>
-      <LoadingScreen />
-    </>
-  }
 
-  if (error) {
-    return showToast(error)
-  }
+  if (loading) return <LoadingScreen />
 
+  if (likeLoading) showToastLoading("liking process..")
+
+  if (error) showToast(error.message)
 
   return (
-
-    <View style={{ flex: 1, }}>
-      <Pressable>
-        <Button
-          title="Post Detail" onPress={() => navigation.navigate("PostDetail")} />
-      </Pressable>
-      <Pressable>
-        <Button
-          title="Register" onPress={() => navigation.navigate("Register")} />
-      </Pressable>
-      <Pressable>
-        <Button
-          title="Login" onPress={() => navigation.navigate("Login")} />
-      </Pressable>
-
-      <FlatList
-        data={data.posts}
-        renderItem={({ item }) => <Post post={item} />}>
-
-      </FlatList>
+    <View style={styles.container}>
+      {data.posts && (
+        <FlatList
+          data={data.posts}
+          renderItem={({ item }) => <Post post={item} likeHandler={likeHandler} />}>
+        </FlatList>
+      )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white"
+  }
+})

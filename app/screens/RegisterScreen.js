@@ -4,6 +4,7 @@ import { useState } from "react"
 import GradientText from "../components/GradientText"
 import { REGISTER } from "../queries/query"
 import { useMutation } from "@apollo/client"
+import LoadingScreen from "../components/LoadingScreen"
 
 
 export default function RegisterScreen(props) {
@@ -46,9 +47,7 @@ export default function RegisterScreen(props) {
 
   if (isLoading) {
     return (
-      <View style={styles.loadingOverlay}>
-        <ActivityIndicator size="large" color="#0063e1" />
-      </View>
+      <LoadingScreen />
     )
   }
 
@@ -89,12 +88,6 @@ export default function RegisterScreen(props) {
 };
 
 const styles = StyleSheet.create({
-  loadingOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   container: {
     flex: 1,
     alignItems: "center",
